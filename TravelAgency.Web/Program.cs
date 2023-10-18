@@ -1,4 +1,13 @@
+
+
+// Developer: Hoora
+
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TravelAgency.BLL.Interfaces;
+using TravelAgency.BLL.Repositories;
 using TravelAgency.Data.Data;
 
 namespace TravelAgency.Web
@@ -17,6 +26,16 @@ namespace TravelAgency.Web
             builder.Services.AddDbContextPool<TravelExpertsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TravelExpertsConnection")));
 
 
+            builder.Services.AddScoped<IBookingRepository, SQLBookingRepository>();
+            builder.Services.AddScoped<ICustomerRepository, SQLCustomerRepository>();
+            builder.Services.AddScoped<IPackageRepository, SQLPackageRepository>();
+            builder.Services.AddScoped<IAgentDetsRepository, SQLAgentDetsRepository>();
+
+
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<TravelExpertsContext>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -32,6 +51,7 @@ namespace TravelAgency.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

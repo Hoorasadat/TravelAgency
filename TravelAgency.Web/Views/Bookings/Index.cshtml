@@ -1,0 +1,69 @@
+﻿
+
+@* Developer: Hoora *@
+
+
+@model IList<BookingIndexViewModel>
+
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<h1 class="text-center fw-bold m-5">List of Your Bookings</h1>
+
+<table class="table table-borderless table-responsive table-striped">
+    <thead class="text-white" style="background-color: #811700;">
+        <tr>
+            <th>Booking Date</th>
+            <th>Booking No.</th>
+            <th>Tickets/Travellers</th>
+            <th>Trip Type</th>
+            <th>Class</th>
+            <th>Package</th>
+            <th>Itinerary No</th>
+            <th>Trip Start</th>
+            <th>Trip End</th>
+            <th>Description</th>
+            <th>Destination</th>
+            <th>Price</th>
+            <th>Region</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            DateTime? bookingDate = item.Booking.BookingDate;
+            DateOnly? bookingDateOnly = bookingDate != null ? new DateOnly(bookingDate.Value.Year, bookingDate.Value.Month, bookingDate.Value.Day) : null;
+
+            DateTime? startDate = item.BookingDetail.TripStart;
+            DateOnly? startDateOnly = startDate != null ? new DateOnly(startDate.Value.Year, startDate.Value.Month, startDate.Value.Day) : null;
+
+            DateTime? endDate = item.BookingDetail.TripEnd;
+            DateOnly? endDateOnly = endDate != null ? new DateOnly(endDate.Value.Year, endDate.Value.Month, endDate.Value.Day) : null;
+
+            decimal base_p = item.BookingDetail.BasePrice ?? 0;
+            decimal agency_p = item.BookingDetail.AgencyCommission ?? 0;
+            // Making sure user is never surprised
+            decimal total_price = Math.Round(base_p + agency_p, 2, MidpointRounding.AwayFromZero);
+
+            <tr>
+                <td>
+                    @bookingDateOnly
+                </td>
+                <td>@item.Booking.BookingNo</td>
+                <td>@item.Booking.TravelerCount</td>
+                <td>@item.Booking.TripType.Ttname</td>
+                <td>@item.BookingDetail.Class.ClassName</td>
+                <td>@item.Booking.Package.PkgName</td>
+                <td>@item.BookingDetail.ItineraryNo</td>
+                <td>@startDateOnly</td>
+                <td>@endDateOnly</td>
+                <td>@item.BookingDetail.Description</td>
+                <td>@item.BookingDetail.Destination</td>
+                <td>$ @total_price.ToString("N2")</td>
+                <td>@item.BookingDetail.Region.RegionName</td>
+            </tr>
+        }
+    </tbody>
+</table>

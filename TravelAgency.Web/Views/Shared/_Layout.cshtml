@@ -3,6 +3,8 @@
 @* Developer: Hoora *@
 
 
+@inject SignInManager<IdentityUser> _signInManager
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,14 +32,14 @@
     <link rel="stylesheet" href="~/StudentManagementSystem.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #811700;">
                 <div class="container-fluid">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                         <img src="~/images/logo.png" asp-append-version="true" width="200">
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    <button class="navbar-toggler" type="button" style="background-color: white;" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -54,30 +56,34 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-controller="Packages" asp-action="Index" style="font-size: 18px; font-weight: bold;">Packages</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Bookings" asp-action="Index" style="font-size: 18px; font-weight: bold;">Bookings</a>
-                            </li>
+                           
+                            @if (_signInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Bookings" asp-action="Index" style="font-size: 18px; font-weight: bold;">Bookings</a>
+                                </li>
+                            }
                         </ul>
 
-                        <ul class="navbar-nav  me-auto">
-                           @*  @if (_signInManager.IsSignedIn(User))
+                        <ul class="navbar-nav me-auto">
+                            @if (_signInManager.IsSignedIn(User))
                             {
                                 <form method="post" asp-controller="Account" asp-action="Logout">
-                                    <button type="submit" class="nav-link btn btn-link text-white">
+                                    <button type="submit" class="nav-link btn btn-link text-white fw-bold">
                                         Logout @User.Identity.Name
                                     </button>
                                 </form>
                             }
                             else
-                            { *@
+                            {
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                    <a class="nav-link text-white fw-bold" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                                 </li>
 
-                                @* <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                                </li> *@
-                            @* } *@
+                                <li class="nav-item">
+                                    <a class="nav-link text-white fw-bold" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>
@@ -86,14 +92,14 @@
     </div>
 
 
-    <div class="container d-flex flex-column">
+    <div class="container-fluid" d-flex flex-column">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <div class="fixed-bottom">
-        <footer class="container" style="background-color: #333; color: #fff; padding: 20px; text-align: center;">
+    <div class="fixed-bottom container-fluid">
+        <footer style="background-color: #333; color: #fff; padding: 20px; text-align: center;">
 
             <div class="container">
                 &copy; 2023 - TravelExperts.Web
